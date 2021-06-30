@@ -1,29 +1,21 @@
-package rendering;
+package renderer;
 
-import rendering.entity.EntityManager;
-import rendering.input.ClickType;
-import rendering.input.Mouse;
-import rendering.point.DimensionConverter;
-import rendering.point.vec3d;
-import rendering.shapes.MyPolygon;
-import rendering.shapes.Tetrahedron;
+import renderer.geometry.WorldManager;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class Display extends Canvas implements Runnable{
+public class Display extends Canvas implements Runnable {
 
     private Thread thread;
     private JFrame frame;
-    private static String title = "3D_Graphics_Engine";
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-    private static boolean running = false;
+    private static String title = "3D-graphics-engine";
+    public static final int WIDTH = 540;
+    public static final int HEIGHT = 360;
+    public static boolean running = false;
 
-    private EntityManager entityManager;
-
-    private Mouse mouse;
+    private WorldManager entityManager;
 
     public Display() {
         this.frame = new JFrame();
@@ -31,14 +23,7 @@ public class Display extends Canvas implements Runnable{
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
 
-        this.mouse = new Mouse();
-
-        this.entityManager = new EntityManager();
-
-        this.addMouseListener(this.mouse);
-        this.addMouseMotionListener(this.mouse);
-        this.addMouseWheelListener(this.mouse);
-
+        this.entityManager = new WorldManager();
     }
 
     public static void main(String[] args) {
@@ -56,7 +41,7 @@ public class Display extends Canvas implements Runnable{
 
     public synchronized void start() {
         running = true;
-        this.thread = new Thread(this, "Display");
+        this.thread = new Thread(this, "rendering.renderer.Display");
         this.thread.start();
     }
 
@@ -86,10 +71,11 @@ public class Display extends Canvas implements Runnable{
             while (delta >= 1) {
                 update();
                 delta--;
-                render();
-                frames++;
+//                render();
+//                frames++;
             }
-
+            render();
+            frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
@@ -108,9 +94,14 @@ public class Display extends Canvas implements Runnable{
         }
 
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
+        Graphics2D g2 = (Graphics2D) g;
+
+        g.setColor(new Color(200, 255, 255));
         g.fillRect(0, 0, WIDTH, HEIGHT); // Set black background
 
+        g.setColor(Color.BLACK);
+
+        g2.setStroke(new BasicStroke(0));
         this.entityManager.render(g);
 
         g.dispose();
@@ -118,6 +109,6 @@ public class Display extends Canvas implements Runnable{
     }
 
     private void update() {
-        this.entityManager.update(this.mouse);
+        this.entityManager.update();
     }
 }
