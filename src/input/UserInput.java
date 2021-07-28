@@ -24,8 +24,11 @@ public class UserInput {
 
         mouseX = this.mouse.getX();
         mouseY = this.mouse.getY();
-        this.camera.yaw += (mouseX - initialX) / 2; // TODO change to Camera class and for fps variation
-        this.camera.pitch += (mouseY - initialY) / 2;
+//        this.camera.yaw += (mouseX - initialX) / 2; // TODO change to Camera class and for fps variation
+//        this.camera.pitch += (mouseY - initialY) / 2;
+        this.camera.yaw += this.mouse.getDx()/2;
+        this.camera.pitch += this.mouse.getDy()/2;
+
 
         initialX = mouseX;
         initialY = mouseY;

@@ -9,10 +9,12 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
     private int mouseX = -1;
     private int mouseY = -1;
+    private int mouseDx = 0;
+    private int mouseDy = 0;
     private int mouseB = -1;
     private int scroll = -1;
     private Robot robot;
-    public static boolean robotIsMoving = false;
+    public static boolean robotIsMoving = false, ignoreMouseMove = false;
 
     public Mouse() {
         try {
@@ -22,12 +24,22 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
         }
     }
 
-    public int getX() {
-        return this.mouseX;
-    }
+    public int getX() { return this.mouseX; }
 
     public int getY() {
         return this.mouseY;
+    }
+
+    public int getDx() {
+        int out = this.mouseDx;
+        this.mouseDx = 0;
+        return out;
+    }
+
+    public int getDy() {
+        int out = this.mouseDy;
+        this.mouseDy = 0;
+        return out;
     }
 
     public ClickType getButton() {
@@ -81,14 +93,35 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
     @Override
     public void mouseMoved(MouseEvent event) {
-
-        if (event.getX() == Display.WIDTH/2 && event.getY() == Display.HEIGHT/2) {
+        if (this.ignoreMouseMove) {
+            this.ignoreMouseMove = false;
             return;
         }
-//        this.mouseX = event.getX(); // TODO sort out mouse outside J Frame
-//        this.mouseY = event.getY();
+
         this.mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX();
         this.mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY();
+
+        this.mouseDx = this.mouseX - (int) (Display.frame.getX() + Display.WIDTH/2);
+        this.mouseDy = this.mouseY - (int) (Display.frame.getY() + Display.HEIGHT/2);
+
+        this.ignoreMouseMove = true;
+        robot.mouseMove((int) (Display.frame.getX() + Display.WIDTH/2), (int) (Display.frame.getY() + Display.HEIGHT/2));
+//        if (event.getX() == Display.WIDTH/2 && event.getY() == Display.HEIGHT/2) {
+//            return;
+//        }
+//        if (this.robotIsMoving == true) {
+//            if (this.mouseX == (int) Display.frame.getX() + Display.WIDTH/2 && this.mouseY == (int) Display.frame.getY() + Display.HEIGHT/2) {
+//                this.robotIsMoving = false;
+//            }
+//            else {
+//                return;
+//            }
+//            System.out.println(this.robotIsMoving);
+//        }
+////        this.mouseX = event.getX(); // TODO sort out mouse outside J Frame
+////        this.mouseY = event.getY();
+//        this.mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX();
+//        this.mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY();
 
 
     }
@@ -109,6 +142,8 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        this.robotIsMoving = false;
+        System.out.println(this.robotIsMoving);
     }
 
     @Override

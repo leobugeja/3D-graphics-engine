@@ -6,6 +6,7 @@ import renderer.geometry.WorldManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class Display extends Canvas implements Runnable {
 
@@ -31,6 +32,17 @@ public class Display extends Canvas implements Runnable {
         this.addMouseMotionListener(this.world_manager.user_input.mouse);
         this.addMouseWheelListener(this.world_manager.user_input.mouse);
         this.addKeyListener(this.world_manager.user_input.keyboard);
+
+
+
+        // Transparent 16 x 16 pixel cursor image.
+//        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+//
+//        // Create a new blank cursor.
+//        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+//
+//        // Set the blank cursor to the JFrame.
+//        this.frame.getContentPane().setCursor(blankCursor);
 
     }
 
