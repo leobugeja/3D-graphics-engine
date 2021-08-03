@@ -1,21 +1,31 @@
 package renderer;
 
+
+import input.UserInput;
+
 import renderer.geometry.WorldManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+import java.awt.image.BufferedImage;
+
+
 public class Display extends Canvas implements Runnable {
 
     private Thread thread;
-    private JFrame frame;
+
+    public static JFrame frame;
+
     private static String title = "3D-graphics-engine";
     public static final int WIDTH = 540;
     public static final int HEIGHT = 360;
     public static boolean running = false;
 
-    private WorldManager entityManager;
+    public static int fps = 0;
+
+    private WorldManager world_manager;
 
     public Display() {
         this.frame = new JFrame();
@@ -23,7 +33,25 @@ public class Display extends Canvas implements Runnable {
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
 
-        this.entityManager = new WorldManager();
+
+        this.world_manager = new WorldManager();
+
+        this.addMouseListener(this.world_manager.user_input.mouse);
+        this.addMouseMotionListener(this.world_manager.user_input.mouse);
+        this.addMouseWheelListener(this.world_manager.user_input.mouse);
+        this.addKeyListener(this.world_manager.user_input.keyboard);
+
+
+
+        // Transparent 16 x 16 pixel cursor image.
+        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+
+        // Create a new blank cursor.
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+
+        // Set the blank cursor to the JFrame.
+        this.frame.getContentPane().setCursor(blankCursor);
+
     }
 
     public static void main(String[] args) {
@@ -47,11 +75,11 @@ public class Display extends Canvas implements Runnable {
 
     public synchronized void stop() {
         running = false;
-        try {
-            this.thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
+        setVisible(false);
+        frame.dispose();
+
     }
 
     @Override
@@ -62,7 +90,8 @@ public class Display extends Canvas implements Runnable {
         double delta = 0;
         int frames = 0;
 
-        this.entityManager.init();
+
+        this.world_manager.init();
 
         while (running) {
             long now = System.nanoTime();
@@ -79,7 +108,10 @@ public class Display extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                this.frame.setTitle(title + " | " + frames + " fps");
+
+                this.frame.setTitle(title + " | " + frames+ " fps");
+                Display.fps = frames; // TODO change fps back to frames then have separate fps variable which doesn't dip down to zero
+
                 frames = 0;
             }
         }
@@ -96,19 +128,26 @@ public class Display extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2 = (Graphics2D) g;
 
+        Rectangle clipShape = new Rectangle(0, 0, this.WIDTH, this.HEIGHT);
+        g.setClip(clipShape);
+
         g.setColor(new Color(200, 255, 255));
         g.fillRect(0, 0, WIDTH, HEIGHT); // Set black background
 
         g.setColor(Color.BLACK);
 
         g2.setStroke(new BasicStroke(0));
-        this.entityManager.render(g);
+
+        this.world_manager.render(g);
+
 
         g.dispose();
         bs.show();
     }
 
     private void update() {
-        this.entityManager.update();
+
+        this.world_manager.update();
+
     }
 }
