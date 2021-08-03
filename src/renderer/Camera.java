@@ -9,8 +9,8 @@ public class Camera{
     private static double x = 0;
     private static double y = 0;
     private static double z = 0;
-    public static double pitch = -289;
-    public static double yaw = -520;
+    public static double pitch = 0;
+    public static double yaw = 0;
     private double move_speed = 30; // meters per second
     private static Vec3d screen_center;
 
@@ -37,13 +37,12 @@ public class Camera{
 //            {0        , S, 0                           , 0},
 //            {0        , 0, z_far/(z_far-z_near)        , 1},
 //            {0        , 0, -z_far*z_near/(z_far-z_near), 0} });
-//    }
+
         proj_mat = new Matrix(new double[][]{
             {a_ratio*S, 0, 0                            , 0},
             {0        , S, 0                            , 0},
             {0        , 0, (z_near+z_far)/(z_near-z_far), 2*z_near*z_far/(z_near-z_far)},
             {0        , 0, -1                           , 0} });
-
 
     }
 
@@ -81,6 +80,7 @@ public class Camera{
         proj_point4D = Matrix.multiply(Camera.rotateMatX(Camera.pitch), proj_point4D);
 
         proj_point4D = Matrix.multiply(Camera.proj_mat, proj_point4D);
+
         double w = proj_point4D.extractElement(3,0);
         Vec3d proj_point3D = new Vec3d(proj_point4D.extractElement(0,0)/w, proj_point4D.extractElement(1,0)/w, proj_point4D.extractElement(2,0)/w);
         // Scaling
@@ -130,5 +130,7 @@ public class Camera{
 //            Camera.y += this.move_speed/(Display.fps+1);
             Camera.y += this.move_speed/60;
         }
+
+        System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
     }
 }

@@ -19,7 +19,6 @@ public class UserInput {
 
     public void update() {
 
-
         this.keyboard.update();
 
         mouseX = this.mouse.getX();

@@ -143,7 +143,6 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
     @Override
     public void mouseEntered(MouseEvent e) {
         this.robotIsMoving = false;
-        System.out.println(this.robotIsMoving);
     }
 
     @Override
