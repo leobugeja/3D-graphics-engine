@@ -1,11 +1,14 @@
 package renderer.geometry.primitives;
 
 import renderer.Camera;
+
 import renderer.Display;
+
 import renderer.geometry.DrawType;
 import renderer.geometry.WorldManager;
 
 import java.awt.*;
+
 
 import static renderer.Display.WIDTH;
 
@@ -32,6 +35,7 @@ public class Triangle {
     }
 
     public void drawTriangle(Graphics g, Vec3d[] point_arr) {
+
         if (point_arr[0].z >= 1 && point_arr[1].z >= 1 && point_arr[2].z >= 1) { // TODO change so that only stop drawing if whole object is behind z
 //            if(point_arr[0].x < WIDTH+200 && point_arr[0].x > -200 && point_arr[1].x < WIDTH+200 && point_arr[1].x > -200 && point_arr[2].x < WIDTH+200 && point_arr[2].x > -200) {
             int[] x_arr = new int[3];

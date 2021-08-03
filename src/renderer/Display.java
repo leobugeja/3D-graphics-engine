@@ -1,21 +1,28 @@
 package renderer;
 
+
 import input.UserInput;
+
 import renderer.geometry.WorldManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+
 import java.awt.image.BufferedImage;
+
 
 public class Display extends Canvas implements Runnable {
 
     private Thread thread;
+
     public static JFrame frame;
+
     private static String title = "3D-graphics-engine";
     public static final int WIDTH = 540;
     public static final int HEIGHT = 360;
     public static boolean running = false;
+
     public static int fps = 0;
 
     private WorldManager world_manager;
@@ -25,6 +32,7 @@ public class Display extends Canvas implements Runnable {
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
+
 
         this.world_manager = new WorldManager();
 
@@ -68,8 +76,10 @@ public class Display extends Canvas implements Runnable {
     public synchronized void stop() {
         running = false;
 
+
         setVisible(false);
         frame.dispose();
+
     }
 
     @Override
@@ -79,6 +89,7 @@ public class Display extends Canvas implements Runnable {
         final double ns = 1000000000.0 / 60;
         double delta = 0;
         int frames = 0;
+
 
         this.world_manager.init();
 
@@ -97,8 +108,10 @@ public class Display extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
+
                 this.frame.setTitle(title + " | " + frames+ " fps");
                 Display.fps = frames; // TODO change fps back to frames then have separate fps variable which doesn't dip down to zero
+
                 frames = 0;
             }
         }
@@ -124,13 +137,17 @@ public class Display extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
 
         g2.setStroke(new BasicStroke(0));
+
         this.world_manager.render(g);
+
 
         g.dispose();
         bs.show();
     }
 
     private void update() {
+
         this.world_manager.update();
+
     }
 }

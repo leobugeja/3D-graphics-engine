@@ -1,6 +1,8 @@
 package renderer;
 
+
 import input.Move;
+
 import renderer.geometry.primitives.Matrix;
 import renderer.geometry.primitives.Vec3d;
 
@@ -9,14 +11,18 @@ public class Camera{
     private static double x = 0;
     private static double y = 0;
     private static double z = 0;
+
     public static double pitch = 0;
     public static double yaw = 0;
     private double move_speed = 30; // meters per second
+
     private static Vec3d screen_center;
 
     private double a_ratio, fov, z_near, z_far;
     private static Matrix proj_mat;
+
     private static Matrix rot_mat;
+
 
     public static void main(String[] args) {
         Camera cam = new Camera(90, 0.1, 1000);
@@ -38,11 +44,13 @@ public class Camera{
 //            {0        , 0, z_far/(z_far-z_near)        , 1},
 //            {0        , 0, -z_far*z_near/(z_far-z_near), 0} });
 
+
         proj_mat = new Matrix(new double[][]{
             {a_ratio*S, 0, 0                            , 0},
             {0        , S, 0                            , 0},
             {0        , 0, (z_near+z_far)/(z_near-z_far), 2*z_near*z_far/(z_near-z_far)},
             {0        , 0, -1                           , 0} });
+
 
     }
 
@@ -64,6 +72,7 @@ public class Camera{
                 {Math.sin(rad), 0,  Math.cos(rad), 0},
                 {0            , 0,              0, 1}
         });
+
     }
 
     public static Vec3d[] projectTri2D(Vec3d[] points) {
@@ -75,6 +84,7 @@ public class Camera{
     }
 
     private static Vec3d projectPoint(Vec3d point) {
+
         Matrix point4D = new Matrix(new double[][]{ {point.x - Camera.x}, {point.y - Camera.y}, {point.z - Camera.z}, {1} });
         Matrix proj_point4D = Matrix.multiply(Camera.rotateMatY(Camera.yaw),point4D); // TODO don't need to recalculate rotation matrix each time, plus can combine together all matrix into 1
         proj_point4D = Matrix.multiply(Camera.rotateMatX(Camera.pitch), proj_point4D);
@@ -99,6 +109,7 @@ public class Camera{
             centered_points[i] = Vec3d.plus(points[i], Camera.screen_center);
         }
         return centered_points;
+
     }
 
     public void move(Move movement) {
@@ -132,5 +143,6 @@ public class Camera{
         }
 
         System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
+
     }
 }
