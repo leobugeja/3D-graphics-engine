@@ -1,5 +1,8 @@
 package renderer.geometry.primitives;
 
+import renderer.geometry.DrawType;
+import renderer.geometry.EntityGraphicSettings;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -25,9 +28,9 @@ public class Mesh {
         return this.triangles;
     }
 
-    public void render(Graphics g, Color c) {
+    public void render(Graphics g, Color c, EntityGraphicSettings settings) {
         for (Triangle tri : this.triangles) {
-            tri.render(g, c);
+            tri.render(g, c, settings);
         }
     }
 }

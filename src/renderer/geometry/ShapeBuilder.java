@@ -3,6 +3,7 @@ package renderer.geometry;
 import renderer.geometry.primitives.Mesh;
 import renderer.geometry.primitives.Triangle;
 import renderer.geometry.primitives.Vec3d;
+import renderer.geometry.DrawType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class ShapeBuilder {
     public static void main(String[] args) {
         Entity a = ShapeBuilder.createCube(100, 0, 0, 0, new Color(0, 0,0));
     }
-    public static Entity createCube(double size, double x_center, double y_center, double z_center, Color color) {
+    public static Entity createCube(double size, double x_center, double y_center, double z_center, Color color, boolean... settings) {
         Mesh cubeMesh = new Mesh();
         // South
         cubeMesh.addTri(new Vec3d(0, 0, 0), new Vec3d(0, size, 0), new Vec3d(size, size, 0));
@@ -34,6 +35,6 @@ public class ShapeBuilder {
 
         cubeMesh.translate(x_center-size/2, y_center-size/2, z_center-size/2);
 
-        return new Entity(new Vec3d(x_center, y_center, z_center), cubeMesh, color);
+        return new Entity(new Vec3d(x_center, y_center, z_center), cubeMesh, color, settings);
     }
 }

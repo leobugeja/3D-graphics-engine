@@ -142,7 +142,7 @@ public class Camera{
             Camera.y += this.move_speed/60;
         }
 
-        System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
+//        System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
 
     }
 }
