@@ -1,10 +1,13 @@
 package renderer.geometry;
 
+import java.awt.*;
+
 public class EntityGraphicSettings {
 
     private boolean transparent = false;
     private boolean edge_lines = true;
     private boolean fill_faces = true;
+    private Color face_color = Color.blue;
 
 //    public EntityGraphicSettings() {
 //        this.transparent = false;
@@ -12,7 +15,8 @@ public class EntityGraphicSettings {
 //        this.fill_faces = true;
 //    }
 
-    public EntityGraphicSettings(boolean... settings) {
+    public EntityGraphicSettings(Color color, boolean... settings) {
+        this.face_color = color;
         if (settings.length > 0) {
             // if settings contains elements override defaults
             this.transparent = settings[0];
@@ -32,5 +36,7 @@ public class EntityGraphicSettings {
     public boolean fillFaces() {
         return this.fill_faces;
     }
+
+    public Color faceColor() { return this.face_color; }
 
 }

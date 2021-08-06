@@ -1,6 +1,6 @@
 package renderer.geometry.primitives;
 
-import renderer.geometry.DrawType;
+import renderer.Camera;
 import renderer.geometry.EntityGraphicSettings;
 
 import java.awt.*;
@@ -28,9 +28,9 @@ public class Mesh {
         return this.triangles;
     }
 
-    public void render(Graphics g, Color c, EntityGraphicSettings settings) {
+    public void render(Camera cam, Graphics g, EntityGraphicSettings settings) {
         for (Triangle tri : this.triangles) {
-            tri.render(g, c, settings);
+            tri.render(cam, g, settings);
         }
     }
 }

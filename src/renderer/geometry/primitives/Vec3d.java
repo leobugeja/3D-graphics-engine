@@ -3,6 +3,12 @@ package renderer.geometry.primitives;
 public class Vec3d {
     public double x, y, z;
 
+    public Vec3d() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
     public Vec3d(double x, double y, double z) {
         this.x = x;
         this.y = y;

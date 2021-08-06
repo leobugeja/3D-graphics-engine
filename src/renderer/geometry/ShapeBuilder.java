@@ -1,12 +1,9 @@
 package renderer.geometry;
 
 import renderer.geometry.primitives.Mesh;
-import renderer.geometry.primitives.Triangle;
 import renderer.geometry.primitives.Vec3d;
-import renderer.geometry.DrawType;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ShapeBuilder {
     public static void main(String[] args) {

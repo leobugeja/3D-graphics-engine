@@ -18,11 +18,10 @@ public class WorldManager {
     public UserInput user_input;
 
 
-    public static DrawType draw_type;
 
     public WorldManager() {
         this.entities = new ArrayList<>();
-        draw_type = DrawType.Fill_and_Line;
+
 
 
         this.camera = new Camera(90, 0.1, 1000);
@@ -34,7 +33,6 @@ public class WorldManager {
 
         entities.add(ShapeBuilder.createCube(30, -30, 0,  60, new Color(0,0,255,25)));
     }
-
     public void update() {
 
         this.user_input.update();
@@ -43,7 +41,7 @@ public class WorldManager {
 
     public void render(Graphics g) {
        for (Entity entity : this.entities) {
-           entity.render(g);
+           entity.render(this.camera, g);
        }
     }
 
