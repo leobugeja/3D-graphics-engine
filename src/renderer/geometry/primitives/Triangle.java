@@ -3,6 +3,7 @@ package renderer.geometry.primitives;
 import renderer.Camera;
 
 import renderer.geometry.EntityGraphicSettings;
+import renderer.geometry.LightSource;
 
 import java.awt.*;
 
@@ -22,8 +23,8 @@ public class Triangle {
         }
     }
 
-    public void render(Camera cam, Graphics g, EntityGraphicSettings settings) {
-        g.setColor(settings.faceColor());
+    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings) {
+
         Vec3d normal = new Vec3d(), line1 = new Vec3d(), line2 = new Vec3d();
         line1.x = this.points[1].x - this.points[0].x;
         line1.y = this.points[1].y - this.points[0].y;
@@ -42,10 +43,22 @@ public class Triangle {
         normal.y /= len;
         normal.z /= len;
 
-        double dot_prod = normal.x*cam.normal.x + normal.y*cam.normal.y + normal.z*cam.normal.z;
+        double cam_dot_prod = normal.x*(this.points[0].x - cam.getX()) + normal.y*(this.points[0].y - cam.getY()) + normal.z*(this.points[0].z - cam.getZ());
 
+        if (!settings.isTransparent()) {
+            if (!light.isPointSource()) {
+                double light_dot_prod = normal.x*light.getX() + normal.y*light.getY() + normal.z*light.getZ();
+                g.setColor(lightShading(settings.faceColor(), light_dot_prod));
+            }
+            if (light.isPointSource()) {
+                // Insert code for point light source
+            }
+        }
+        else {
+            g.setColor(settings.faceColor());
+        }
 
-        if (dot_prod <= 0) {
+        if (cam_dot_prod <= 0 || settings.isTransparent()) {
             Vec3d[] projected_points = Camera.projectTri2D(this.points);
 
             if (projected_points[0].z >= 1 && projected_points[1].z >= 1 && projected_points[2].z >= 1) { // TODO change so that only stop drawing if whole object is behind z
@@ -72,5 +85,24 @@ public class Triangle {
             g.setColor(Color.BLACK);
             g.drawPolygon(x_arr, y_arr, 3);
         }
+    }
+
+    private Color lightShading(Color base_color, double dot_prod) {
+        double darkness_factor;
+        int r = base_color.getRed();
+        int g = base_color.getGreen();
+        int b = base_color.getBlue();
+        int a = base_color.getAlpha();
+
+        if (dot_prod < 0) {
+            darkness_factor = 0.5;
+        }
+        else {
+            darkness_factor = 0.5 + 0.5*dot_prod;
+        }
+        r = (int) (r*darkness_factor);
+        g = (int) (g*darkness_factor);
+        b = (int) (b*darkness_factor);
+        return new Color(r, g, b, a);
     }
 }

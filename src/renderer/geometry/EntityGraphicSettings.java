@@ -5,15 +5,10 @@ import java.awt.*;
 public class EntityGraphicSettings {
 
     private boolean transparent = false;
-    private boolean edge_lines = true;
+    private boolean edge_lines = false;
     private boolean fill_faces = true;
     private Color face_color = Color.blue;
 
-//    public EntityGraphicSettings() {
-//        this.transparent = false;
-//        this.edge_lines = true;
-//        this.fill_faces = true;
-//    }
 
     public EntityGraphicSettings(Color color, boolean... settings) {
         this.face_color = color;
@@ -22,6 +17,10 @@ public class EntityGraphicSettings {
             this.transparent = settings[0];
             this.edge_lines = settings[1];
             this.fill_faces = settings[2];
+        }
+
+        if (this.transparent == true) {
+            this.face_color = new Color(this.face_color.getRed(), this.face_color.getGreen(), this.face_color.getBlue(),100);
         }
     }
 

@@ -7,6 +7,9 @@ import renderer.geometry.primitives.Vec3d;
 
 import java.awt.*;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Entity {
 
     private Mesh mesh;
@@ -20,7 +23,11 @@ public class Entity {
 
     }
 
-    public void render(Camera cam, Graphics g) {
-        this.mesh.render(cam, g, this.graphic_settings);
+    public void render(Camera cam, LightSource light, Graphics g) {
+        this.mesh.render(cam, light, g, this.graphic_settings);
+    }
+
+    public double distanceToCamera() {
+        return sqrt(pow((Camera.getX() - this.pos.x),2) + pow((Camera.getY() - this.pos.y),2) + pow((Camera.getZ() - this.pos.z),2));
     }
 }

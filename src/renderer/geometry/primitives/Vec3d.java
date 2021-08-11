@@ -1,5 +1,7 @@
 package renderer.geometry.primitives;
 
+import static java.lang.Math.sqrt;
+
 public class Vec3d {
     public double x, y, z;
 
@@ -24,4 +26,12 @@ public class Vec3d {
     public static Vec3d plus(Vec3d p1, Vec3d p2) {
         return new Vec3d(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
     }
+
+    public void normalize() {
+        double len = sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+        this.x /= len;
+        this.y /= len;
+        this.z /= len;
+    }
+
 }

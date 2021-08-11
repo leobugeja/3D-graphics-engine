@@ -153,4 +153,16 @@ public class Camera{
         this.normal.y = Math.sin(this.pitch*Math.PI/180);
         this.normal.z = Math.cos(this.yaw*Math.PI/180)*Math.cos(this.pitch*Math.PI/180);
     }
+
+    public static double getX() {
+        return Camera.x;
+    }
+
+    public static double getY() {
+        return Camera.y;
+    }
+
+    public static double getZ() {
+        return Camera.z;
+    }
 }
