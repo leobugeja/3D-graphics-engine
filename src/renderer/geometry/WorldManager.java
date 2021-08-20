@@ -19,25 +19,37 @@ public class WorldManager {
 
     public UserInput user_input;
 
+    private double startTime;
+    private double seconds;
+
 
 
     public WorldManager() {
         this.entities = new ArrayList<>();
-        this.light_source = new LightSource(new Vec3d(0.2,-1,-0.2), false);
+        this.light_source = new LightSource(new Vec3d(0.2,-1,-0.2), true);
 
         this.camera = new Camera(90, 0.1, 1000);
         this.user_input = new UserInput(this.camera);
     }
 
     public void init() {
+        this.startTime = System.nanoTime();
 
-        entities.add(ShapeBuilder.createCube(10, 14, 10,  25, new Color(232, 139, 139)));
+        this.entities.add(ShapeBuilder.createCube(10, 14, 10,  25, new Color(232, 139, 139)));
 
-        entities.add(ShapeBuilder.createCube(30, -30, 0,  60, new Color(136, 180, 255), true, true, true));
+        this.entities.add(ShapeBuilder.createCube(30, -30, 0,  60, new Color(136, 180, 255), true, true, true));
+
+        Entity light_entity = ShapeBuilder.createCube(1, 0, 0,  0, new Color(255, 229, 155), true, true, true);
+
+        this.entities.add(light_entity);
+        this.light_source.setEntity(light_entity);
+
     }
     public void update() {
-
+        seconds = (System.nanoTime() - this.startTime)/1000000000.0;
         this.user_input.update();
+
+        this.light_source.moveSequence(seconds);
 
     }
 
@@ -46,7 +58,9 @@ public class WorldManager {
 
         for (Entity entity : this.entities) {
            entity.render(this.camera, this.light_source, g);
-       }
+        }
+
+
     }
 
 

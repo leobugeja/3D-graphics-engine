@@ -23,15 +23,25 @@ public class Triangle {
         }
     }
 
-    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings) {
+    private Vec3d[] centeredCoordinates(Vec3d center_pos) {
+        Vec3d[] newCoords = new Vec3d[]{
+                Vec3d.plus(this.points[0], center_pos),
+                Vec3d.plus(this.points[1], center_pos),
+                Vec3d.plus(this.points[2], center_pos)};
+        return newCoords;
+    }
+
+    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings, Vec3d pos) {
+
+        Vec3d[] centered_points = centeredCoordinates(pos);
 
         Vec3d normal = new Vec3d(), line1 = new Vec3d(), line2 = new Vec3d();
-        line1.x = this.points[1].x - this.points[0].x;
-        line1.y = this.points[1].y - this.points[0].y;
-        line1.z = this.points[1].z - this.points[0].z;
-        line2.x = this.points[2].x - this.points[0].x;
-        line2.y = this.points[2].y - this.points[0].y;
-        line2.z = this.points[2].z - this.points[0].z;
+        line1.x = centered_points[1].x - centered_points[0].x;
+        line1.y = centered_points[1].y - centered_points[0].y;
+        line1.z = centered_points[1].z - centered_points[0].z;
+        line2.x = centered_points[2].x - centered_points[0].x;
+        line2.y = centered_points[2].y - centered_points[0].y;
+        line2.z = centered_points[2].z - centered_points[0].z;
 
         normal.x = line1.y * line2.z - line1.z * line2.y;
         normal.y = line1.z * line2.x - line1.x * line2.z;
@@ -43,23 +53,28 @@ public class Triangle {
         normal.y /= len;
         normal.z /= len;
 
-        double cam_dot_prod = normal.x*(this.points[0].x - cam.getX()) + normal.y*(this.points[0].y - cam.getY()) + normal.z*(this.points[0].z - cam.getZ());
+        double cam_dot_prod = normal.x*(centered_points[0].x - cam.getX()) + normal.y*(centered_points[0].y - cam.getY()) + normal.z*(centered_points[0].z - cam.getZ());
 
         if (!settings.isTransparent()) {
+
+            double light_dot_prod;
             if (!light.isPointSource()) {
-                double light_dot_prod = normal.x*light.getX() + normal.y*light.getY() + normal.z*light.getZ();
-                g.setColor(lightShading(settings.faceColor(), light_dot_prod));
+                light_dot_prod = normal.x*light.getX() + normal.y*light.getY() + normal.z*light.getZ();
             }
-            if (light.isPointSource()) {
-                // Insert code for point light source
+
+            else {
+                Vec3d light_norm = new Vec3d(centered_points[0].x - light.getX(), centered_points[0].y - light.getY(), centered_points[0].z - light.getZ());
+                light_norm.normalize();
+                light_dot_prod = - normal.x*light_norm.x - normal.y*light_norm.y - normal.z*light_norm.z; // should be to center of triangle not the 0th point
             }
+            g.setColor(lightShading(settings.faceColor(), light_dot_prod));
         }
         else {
             g.setColor(settings.faceColor());
         }
 
         if (cam_dot_prod <= 0 || settings.isTransparent()) {
-            Vec3d[] projected_points = Camera.projectTri2D(this.points);
+            Vec3d[] projected_points = Camera.projectTri2D(centered_points);
 
             if (projected_points[0].z >= 1 && projected_points[1].z >= 1 && projected_points[2].z >= 1) { // TODO change so that only stop drawing if whole object is behind z
                 this.drawTriangle(g, projected_points, settings);

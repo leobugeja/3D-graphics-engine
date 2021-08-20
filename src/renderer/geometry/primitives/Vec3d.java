@@ -34,4 +34,9 @@ public class Vec3d {
         this.z /= len;
     }
 
+    public static Vec3d normalize(Vec3d vector) {
+        double len = sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);
+        return new Vec3d(vector.x/len, vector.y/len, vector.z/len);
+    }
+
 }

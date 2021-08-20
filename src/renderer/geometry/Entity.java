@@ -24,10 +24,16 @@ public class Entity {
     }
 
     public void render(Camera cam, LightSource light, Graphics g) {
-        this.mesh.render(cam, light, g, this.graphic_settings);
+        this.mesh.render(cam, light, g, this.graphic_settings, this.pos);
     }
 
     public double distanceToCamera() {
         return sqrt(pow((Camera.getX() - this.pos.x),2) + pow((Camera.getY() - this.pos.y),2) + pow((Camera.getZ() - this.pos.z),2));
+    }
+
+    public void setPos(double x, double y, double z) {
+        this.pos.x = x;
+        this.pos.y = y;
+        this.pos.z = z;
     }
 }

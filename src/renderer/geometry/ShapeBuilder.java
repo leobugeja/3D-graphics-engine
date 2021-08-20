@@ -30,7 +30,7 @@ public class ShapeBuilder {
         cubeMesh.addTri(new Vec3d(size, 0, size), new Vec3d(0, 0, size), new Vec3d(0, 0, 0));
         cubeMesh.addTri(new Vec3d(size, 0, size), new Vec3d(0, 0, 0), new Vec3d(size, 0, 0));
 
-        cubeMesh.translate(x_center-size/2, y_center-size/2, z_center-size/2);
+        //cubeMesh.translate(x_center-size/2, y_center-size/2, z_center-size/2);
 
         return new Entity(new Vec3d(x_center, y_center, z_center), cubeMesh, color, settings);
     }

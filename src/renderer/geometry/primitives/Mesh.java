@@ -29,9 +29,9 @@ public class Mesh {
         return this.triangles;
     }
 
-    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings) {
+    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings, Vec3d pos) {
         for (Triangle tri : this.triangles) {
-            tri.render(cam, light, g, settings);
+            tri.render(cam, light, g, settings, pos);
         }
     }
 }
