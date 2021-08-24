@@ -14,6 +14,8 @@ public class Camera{
 
     public static double pitch = 0;
     public static double yaw = 0;
+    public static Vec3d normal = new Vec3d();
+
     private double move_speed = 30; // meters per second
 
     private static Vec3d screen_center;
@@ -142,7 +144,25 @@ public class Camera{
             Camera.y += this.move_speed/60;
         }
 
-        System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
+//        System.out.printf("x:%.2f y:%.2f z:%.2f yaw:%.2f pitch: %.2f \n", Camera.x, Camera.y, Camera.z, Camera.yaw, Camera.pitch);
 
+    }
+
+    public void updateNormal() {
+        this.normal.x = Math.sin(this.yaw*Math.PI/180)*Math.cos(this.pitch*Math.PI/180);
+        this.normal.y = Math.sin(this.pitch*Math.PI/180);
+        this.normal.z = Math.cos(this.yaw*Math.PI/180)*Math.cos(this.pitch*Math.PI/180);
+    }
+
+    public static double getX() {
+        return Camera.x;
+    }
+
+    public static double getY() {
+        return Camera.y;
+    }
+
+    public static double getZ() {
+        return Camera.z;
     }
 }

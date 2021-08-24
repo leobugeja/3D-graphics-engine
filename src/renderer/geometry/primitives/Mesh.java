@@ -1,5 +1,9 @@
 package renderer.geometry.primitives;
 
+import renderer.Camera;
+import renderer.geometry.EntityGraphicSettings;
+import renderer.geometry.LightSource;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -25,9 +29,9 @@ public class Mesh {
         return this.triangles;
     }
 
-    public void render(Graphics g, Color c) {
+    public void render(Camera cam, LightSource light, Graphics g, EntityGraphicSettings settings, Vec3d pos) {
         for (Triangle tri : this.triangles) {
-            tri.render(g, c);
+            tri.render(cam, light, g, settings, pos);
         }
     }
 }
