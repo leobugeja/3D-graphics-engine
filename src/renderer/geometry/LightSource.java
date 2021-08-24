@@ -35,9 +35,9 @@ public class LightSource {
 
     public void moveSequence(double seconds) {
         if (this.is_point_source) {
-            this.vector.x = 15*Math.cos(seconds) + 14;
-            this.vector.y = -10*Math.cos(seconds) + 10;
-            this.vector.z = 15*Math.sin(seconds) + 25;
+            this.vector.x = 20*Math.cos(seconds) + 30;
+            this.vector.y = -15*Math.cos(seconds) - 10;
+            this.vector.z = 20*Math.sin(seconds) + 60;
             this.representation.setPos(this.vector.x, this.vector.y, this.vector.z);
         }
         else {

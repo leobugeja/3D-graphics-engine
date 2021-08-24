@@ -24,6 +24,9 @@ public class Entity {
     }
 
     public void render(Camera cam, LightSource light, Graphics g) {
+        if (this.graphic_settings.isSelf_illuminated()) {
+            this.drawHalo(g, this.graphic_settings);
+        }
         this.mesh.render(cam, light, g, this.graphic_settings, this.pos);
     }
 
@@ -35,5 +38,19 @@ public class Entity {
         this.pos.x = x;
         this.pos.y = y;
         this.pos.z = z;
+    }
+
+    private void drawHalo(Graphics g, EntityGraphicSettings settings) { // TODO halo radius does not change size with projected radius
+        Vec3d[] projected_pos = Camera.projectTri2D(new Vec3d[]{this.pos, this.pos, this.pos});
+
+        double cam_dist = Math.sqrt(pow(this.pos.x-Camera.getX(),2) + pow(this.pos.y-Camera.getY(),2) + pow(this.pos.z-Camera.getZ(),2));
+        int diameter1 = (int) (1500/cam_dist);
+        int diameter2 = (int) (2500/cam_dist);
+
+        g.setColor(new Color(settings.faceColor().getRed(), settings.faceColor().getGreen(), settings.faceColor().getBlue(), 40));
+        g.fillOval((int) projected_pos[0].x - diameter1/2, (int) projected_pos[0].y - diameter1/2, diameter1, diameter1);
+
+        g.setColor(new Color(settings.faceColor().getRed(), settings.faceColor().getGreen(), settings.faceColor().getBlue(), 20));
+        g.fillOval((int) projected_pos[0].x - diameter2/2, (int) projected_pos[0].y - diameter2/2, diameter2, diameter2);
     }
 }

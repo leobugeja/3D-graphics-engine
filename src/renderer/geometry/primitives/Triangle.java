@@ -55,7 +55,10 @@ public class Triangle {
 
         double cam_dot_prod = normal.x*(centered_points[0].x - cam.getX()) + normal.y*(centered_points[0].y - cam.getY()) + normal.z*(centered_points[0].z - cam.getZ());
 
-        if (!settings.isTransparent()) {
+        if (settings.isSelf_illuminated()) {
+            g.setColor(settings.faceColor());
+        }
+        else if(!settings.isTransparent()) {
 
             double light_dot_prod;
             if (!light.isPointSource()) {

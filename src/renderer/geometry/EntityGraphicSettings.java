@@ -7,6 +7,7 @@ public class EntityGraphicSettings {
     private boolean transparent = false;
     private boolean edge_lines = false;
     private boolean fill_faces = true;
+    private boolean self_illuminated = false;
     private Color face_color = Color.blue;
 
 
@@ -17,6 +18,7 @@ public class EntityGraphicSettings {
             this.transparent = settings[0];
             this.edge_lines = settings[1];
             this.fill_faces = settings[2];
+            this.self_illuminated = settings[3];
         }
 
         if (this.transparent == true) {
@@ -34,6 +36,10 @@ public class EntityGraphicSettings {
 
     public boolean fillFaces() {
         return this.fill_faces;
+    }
+
+    public boolean isSelf_illuminated() {
+        return this.self_illuminated;
     }
 
     public Color faceColor() { return this.face_color; }

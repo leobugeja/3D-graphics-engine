@@ -37,9 +37,13 @@ public class WorldManager {
 
         this.entities.add(ShapeBuilder.createCube(10, 14, 10,  25, new Color(232, 139, 139)));
 
-        this.entities.add(ShapeBuilder.createCube(30, -30, 0,  60, new Color(136, 180, 255), true, true, true));
+        this.entities.add(ShapeBuilder.createCube(30, -30, 0,  60, new Color(136, 180, 255)));
 
-        Entity light_entity = ShapeBuilder.createCube(1, 0, 0,  0, new Color(255, 229, 155), true, true, true);
+        this.entities.add(ShapeBuilder.createSphere(10, 20,30, -10,  60, new Color(140, 255, 136), false, false, true, false));
+
+
+
+        Entity light_entity = ShapeBuilder.createSphere(2, 8,0, 0,  0, new Color(255, 245, 158, 255), false, false, true, true);
 
         this.entities.add(light_entity);
         this.light_source.setEntity(light_entity);
