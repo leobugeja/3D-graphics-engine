@@ -16,6 +16,7 @@ public class WorldManager {
     private List<Entity> entities;
     private Camera camera;
     private LightSource light_source;
+    private Ground ground;
 
     public UserInput user_input;
 
@@ -41,7 +42,7 @@ public class WorldManager {
 
         this.entities.add(ShapeBuilder.createSphere(10, 20,30, -10,  60, new Color(140, 255, 136), false, false, true, false));
 
-
+//        this.ground = new Ground(new Color(0,0,0));
 
         Entity light_entity = ShapeBuilder.createSphere(2, 8,0, 0,  0, new Color(255, 245, 158, 255), false, false, true, true);
 
@@ -59,6 +60,8 @@ public class WorldManager {
 
     public void render(Graphics g) {
         this.entities.sort(new CameraDistanceComparator());
+
+//        this.ground.render(this.camera, this.light_source, g);
 
         for (Entity entity : this.entities) {
            entity.render(this.camera, this.light_source, g);

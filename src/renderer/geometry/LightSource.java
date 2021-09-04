@@ -32,6 +32,7 @@ public class LightSource {
     public double getZ() {
         return this.vector.z;
     }
+    public Vec3d getPos() { return this.vector; }
 
     public void moveSequence(double seconds) {
         if (this.is_point_source) {

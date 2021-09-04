@@ -8,6 +8,7 @@ public class EntityGraphicSettings {
     private boolean edge_lines = false;
     private boolean fill_faces = true;
     private boolean self_illuminated = false;
+    private boolean drawBehind = false;
     private Color face_color = Color.blue;
 
 
@@ -40,6 +41,14 @@ public class EntityGraphicSettings {
 
     public boolean isSelf_illuminated() {
         return this.self_illuminated;
+    }
+
+    public boolean drawBehind() {
+        return this.drawBehind;
+    }
+
+    public void setToDrawBehind() {
+        this.drawBehind = true;
     }
 
     public Color faceColor() { return this.face_color; }

@@ -88,7 +88,7 @@ public class Camera{
     private static Vec3d projectPoint(Vec3d point) {
 
         Matrix point4D = new Matrix(new double[][]{ {point.x - Camera.x}, {point.y - Camera.y}, {point.z - Camera.z}, {1} });
-        Matrix proj_point4D = Matrix.multiply(Camera.rotateMatY(Camera.yaw),point4D); // TODO don't need to recalculate rotation matrix each time, plus can combine together all matrix into 1
+        Matrix proj_point4D = Matrix.multiply(Camera.rotateMatY(Camera.yaw),point4D);
         proj_point4D = Matrix.multiply(Camera.rotateMatX(Camera.pitch), proj_point4D);
 
         proj_point4D = Matrix.multiply(Camera.proj_mat, proj_point4D);
@@ -108,7 +108,7 @@ public class Camera{
     public static Vec3d[] centerCoordinates(Vec3d[] points) {
         Vec3d[] centered_points = new Vec3d[points.length];
         for (int i = 0; i < points.length; i++) {
-            centered_points[i] = Vec3d.plus(points[i], Camera.screen_center);
+            centered_points[i] = Vec3d.add(points[i], Camera.screen_center);
         }
         return centered_points;
 
@@ -164,5 +164,9 @@ public class Camera{
 
     public static double getZ() {
         return Camera.z;
+    }
+
+    public static Vec3d getPos() {
+        return new Vec3d(Camera.x, Camera.y, Camera.z);
     }
 }

@@ -23,8 +23,24 @@ public class Vec3d {
         this.z += z_trans;
     }
 
-    public static Vec3d plus(Vec3d p1, Vec3d p2) {
+    public static Vec3d add(Vec3d p1, Vec3d p2) {
         return new Vec3d(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+    }
+
+    public static Vec3d subtract(Vec3d p1, Vec3d p2) {
+        return new Vec3d(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+    }
+
+    public static Vec3d normal(Vec3d p1, Vec3d p2) {
+        return new Vec3d(p1.y*p2.z-p1.z*p2.y,p1.z*p2.x-p1.x*p2.z, p1.x*p2.y-p1.y*p2.x);
+    }
+
+    public static double length(Vec3d vec) {
+        return Math.sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z);
+    }
+
+    public static double dotProduct(Vec3d p1, Vec3d p2) {
+        return p1.x*p2.x + p1.y*p2.y + p1.z*p2.z;
     }
 
     public void normalize() {
