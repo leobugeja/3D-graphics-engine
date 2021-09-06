@@ -3,7 +3,9 @@ package renderer;
 
 import input.Move;
 
+import renderer.geometry.primitives.ClippingResultTri;
 import renderer.geometry.primitives.Matrix;
+import renderer.geometry.primitives.Triangle;
 import renderer.geometry.primitives.Vec3d;
 
 public class Camera{
@@ -23,7 +25,7 @@ public class Camera{
     private double a_ratio, fov, z_near, z_far;
     private static Matrix proj_mat;
 
-    private static Matrix rot_mat;
+    private static Matrix view_space_matrix;
 
 
     public static void main(String[] args) {
@@ -53,10 +55,13 @@ public class Camera{
             {0        , 0, (z_near+z_far)/(z_near-z_far), 2*z_near*z_far/(z_near-z_far)},
             {0        , 0, -1                           , 0} });
 
-
     }
 
-        private static Matrix rotateMatX(double degrees) {
+    public void updateViewSpaceMatrix() {
+        Camera.view_space_matrix = Matrix.multiply(Camera.rotateMatX(Camera.pitch), Camera.rotateMatY(Camera.yaw));
+    }
+
+    private static Matrix rotateMatX(double degrees) {
         double rad = Math.PI*degrees/180;
         return new Matrix(new double[][]{
                 {1, 0, 0, 0},
@@ -77,21 +82,50 @@ public class Camera{
 
     }
 
-    public static Vec3d[] projectTri2D(Vec3d[] points) {
-        Vec3d[] new_points = new Vec3d[3];
-        for (int i = 0; i < 3; i++) {
-            new_points[i] = projectPoint(points[i]);
+    public static Triangle[] projectTri2D(Vec3d[] points) {
+        Vec3d[] transformed_points = new Vec3d[] {new Vec3d(), new Vec3d(), new Vec3d()}; // TODO might be able to put Vec3[3]
+        Vec3d[] tri_view_space_points = new Vec3d[] {new Vec3d(), new Vec3d(), new Vec3d()};
+        Vec3d[] tri_projected_points = new Vec3d[] {new Vec3d(), new Vec3d(), new Vec3d()};
+
+        // Translate world space relative to camera position
+        transformed_points[0] = Vec3d.subtract(points[0], Camera.getPos());
+        transformed_points[1] = Vec3d.subtract(points[1], Camera.getPos());
+        transformed_points[2] = Vec3d.subtract(points[2], Camera.getPos());
+
+        // Rotate translated world space to view space
+        tri_view_space_points[0] = Matrix.multiply(Camera.view_space_matrix, transformed_points[0]);
+        tri_view_space_points[1] = Matrix.multiply(Camera.view_space_matrix, transformed_points[1]);
+        tri_view_space_points[2] = Matrix.multiply(Camera.view_space_matrix, transformed_points[2]);
+
+        // Clip the triangle against the near plane
+        int num_clipped_triangles = 0;
+        Triangle[] triangles_to_draw = new Triangle[2];
+
+        ClippingResultTri clipping_result = Triangle.clipTriangleAgainstPlane(new Vec3d(0,0,1), new Vec3d(0,0,1), tri_view_space_points);
+        num_clipped_triangles = clipping_result.num_clipped_triangles;
+
+        for (int n = 0; n < num_clipped_triangles; n++) {
+
+            // Project 3D points into 2D
+            tri_projected_points[0] = projectPoint(clipping_result.getOutTri(n)[0]);
+            tri_projected_points[1] = projectPoint(clipping_result.getOutTri(n)[1]);
+            tri_projected_points[2] = projectPoint(clipping_result.getOutTri(n)[2]);
+
+            triangles_to_draw[n] = new Triangle(centerCoordinates(tri_projected_points));
         }
-        return centerCoordinates(new_points);
+
+        return triangles_to_draw;
     }
 
     private static Vec3d projectPoint(Vec3d point) {
 
-        Matrix point4D = new Matrix(new double[][]{ {point.x - Camera.x}, {point.y - Camera.y}, {point.z - Camera.z}, {1} });
-        Matrix proj_point4D = Matrix.multiply(Camera.rotateMatY(Camera.yaw),point4D);
-        proj_point4D = Matrix.multiply(Camera.rotateMatX(Camera.pitch), proj_point4D);
+        Matrix point4D = new Matrix(new double[][]{ {point.x}, {point.y}, {point.z}, {1} });
+//        Matrix proj_point4D = Matrix.multiply(Camera.rotateMatY(Camera.yaw),point4D);
+//        proj_point4D = Matrix.multiply(Camera.rotateMatX(Camera.pitch), proj_point4D);
 
-        proj_point4D = Matrix.multiply(Camera.proj_mat, proj_point4D);
+        //Matrix view_space = Matrix.multiply(Camera.view_space_matrix, point);
+
+        Matrix proj_point4D = Matrix.multiply(Camera.proj_mat, point4D);
 
         double w = proj_point4D.extractElement(3,0);
         Vec3d proj_point3D = new Vec3d(proj_point4D.extractElement(0,0)/w, proj_point4D.extractElement(1,0)/w, proj_point4D.extractElement(2,0)/w);

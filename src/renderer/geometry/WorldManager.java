@@ -17,6 +17,7 @@ public class WorldManager {
     private Camera camera;
     private LightSource light_source;
     private Ground ground;
+    private CameraDistanceComparator cam_distance_comparator;
 
     public UserInput user_input;
 
@@ -31,6 +32,8 @@ public class WorldManager {
 
         this.camera = new Camera(90, 0.1, 1000);
         this.user_input = new UserInput(this.camera);
+
+        this.cam_distance_comparator = new CameraDistanceComparator();
     }
 
     public void init() {
@@ -59,7 +62,8 @@ public class WorldManager {
     }
 
     public void render(Graphics g) {
-        this.entities.sort(new CameraDistanceComparator());
+        this.camera.updateViewSpaceMatrix();
+        this.entities.sort(this.cam_distance_comparator);
 
 //        this.ground.render(this.camera, this.light_source, g);
 

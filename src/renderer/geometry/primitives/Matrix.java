@@ -37,6 +37,22 @@ public class Matrix {
         return new Matrix(new_mat);
     }
 
+    public static Vec3d multiply(Matrix mat1, Vec3d vec) {
+        if (mat1.size[1] != 4) {
+            throw new ArithmeticException("Matrix dimensions do not match size for vector multiplication");
+        }
+        double[] mat2 = {vec.x, vec.y, vec.z, 1};
+
+        int rows = mat1.size[0];
+        double[] new_mat = new double[rows];
+        for (int r = 0; r < rows; r++) {
+            new_mat[r] = dot(mat1.extractRow(r), mat2);
+        }
+        return new Vec3d(new_mat[0], new_mat[1], new_mat[2]);
+    }
+
+
+
     public double extractElement(int row, int column) {
         return this.mat[row][column];
     }
